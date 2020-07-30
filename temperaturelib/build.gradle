@@ -1,0 +1,53 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation files('libs\\rtx2080ti.jar')
+    implementation files('libs\\amg88xx.jar')
+    implementation files('libs\\imlx90640.jar')
+    implementation files('libs\\imlx90641.jar')
+    implementation files('libs\\mlx90621.jar')
+    implementation files('libs\\omron.jar')
+    implementation files('libs\\ImiSDK.jar')
+    implementation files('libs\\serialport.jar')
+
+    //    implementation project(path: ':imlx90640')
+//    implementation project(path: ':omron')
+//    implementation project(path: ':imlx90641')
+//    implementation project(path: ':amg88xx')
+//    implementation project(path: ':rtx2080ti')
+//    implementation project(path: ':mlx90621')
+//    implementation project(path: ':serialport')
+}
