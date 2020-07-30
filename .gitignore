@@ -17,3 +17,5 @@
 /serialport/build/
 /temperaturelib/build/
 /local.properties
+/*/*.iml
+*.iml
