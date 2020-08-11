@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.ys.temperaturelib.device.MeasureResult;
 import com.ys.temperaturelib.device.serialport.ProductImp;
+import com.ys.temperaturelib.device.serialport.RE_XINGMA;
 import com.ys.temperaturelib.device.serialport.SLSC_HM_32x32;
 import com.ys.temperaturelib.temperature.TemperatureEntity;
 import com.ys.temperaturelib.utils.DataFormatUtil;
@@ -38,7 +39,8 @@ public class PointSerialFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         mSerialProduct = ((SerialActivity) getActivity()).getCurProduct();
         measure(mSerialProduct.getDevice(), mSerialProduct.getBaudrate());
-        if (mSerialProduct instanceof SLSC_HM_32x32) {
+        if ((mSerialProduct instanceof SLSC_HM_32x32)
+                || mSerialProduct instanceof RE_XINGMA) {
             handler = new Handler();
             handler.post(sendData);
         }
@@ -50,7 +52,7 @@ public class PointSerialFragment extends BaseFragment {
             if (mSerialProduct != null) {
                 byte[] order = mSerialProduct.getOrderDataOutputQuery();
                 mSerialProduct.order(order);
-                handler.postDelayed(sendData,500);
+                handler.postDelayed(sendData, 500);
             }
         }
     };
@@ -70,13 +72,14 @@ public class PointSerialFragment extends BaseFragment {
             }, devicePath, deviceRate);
         }
     }
+
     DecimalFormat fnum = new DecimalFormat("##0.00");
     Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message message) {
             TemperatureEntity entity = (TemperatureEntity) message.obj;
             measureText.setText("TO : " + fnum.format(entity.temperatue) + "°"
-                    + "\nTA : " +  fnum.format(entity.ta) + "°");
+                    + "\nTA : " + fnum.format(entity.ta) + "°");
             return false;
         }
     });

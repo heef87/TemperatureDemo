@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.ys.temperaturelib.device.serialport.CHUWO_32x32;
+import com.ys.temperaturelib.device.serialport.RE_XINGMA;
 import com.ys.temperaturelib.device.serialport.RQVK002_TW;
 import com.ys.temperaturelib.device.serialport.SGY_MCU90614_TW;
 import com.ys.temperaturelib.device.serialport.SGY_MCU90640_32x24;
@@ -26,7 +27,6 @@ import com.ys.temperaturelib.device.SThermometer;
 import com.ys.temperaturelib.device.serialport.SMLX90621_RR;
 import com.ys.temperaturelib.device.serialport.SMLX90621_YS;
 import com.ys.temperaturelib.device.serialport.SYM32A_32x32_XM;
-import com.ys.temperaturelib.range.device.DepthImpl;
 import com.ys.temperaturelib.range.MesureResult;
 import com.ys.temperaturelib.range.RangeFinder;
 import com.ys.temperaturelib.range.device.FileImpl;
@@ -41,11 +41,11 @@ public class SerialActivity extends AppCompatActivity implements View.OnClickLis
     public static final String[] MODE_SERIALPORT = new String[]{SLSC_HM_32x32.DEFAULT_MODE_NAME, RQVK002_TW.DEFAULT_MODE_NAME, SMLX90614.DEFAULT_MODE_NAME,
             SGY_MCU90614_TW.DEFAULT_MODE_NAME, SGY_MCU90640_32x24.DEFAULT_MODE_NAME, SM23_32x32_XM.DEFAULT_MODE_NAME,
             SYM32A_32x32_XM.DEFAULT_MODE_NAME, SHAIMAN_32x24.DEFAULT_MODE_NAME, SMLX90621_RR.DEFAULT_MODE_NAME,
-            SMLX90621_YS.DEFAULT_MODE_NAME, CHUWO_32x32.DEFAULT_MODE_NAME};
+            SMLX90621_YS.DEFAULT_MODE_NAME, CHUWO_32x32.DEFAULT_MODE_NAME, RE_XINGMA.DEFAULT_MODE_NAME};
 
     ProductImp[] mSerialPorts = new ProductImp[]{
             new SLSC_HM_32x32(), new RQVK002_TW(), new SMLX90614(), new SGY_MCU90614_TW(), new SGY_MCU90640_32x24(), new SM23_32x32_XM(),
-            new SYM32A_32x32_XM(), new SHAIMAN_32x24(), new SMLX90621_RR(), new SMLX90621_YS(), new CHUWO_32x32()
+            new SYM32A_32x32_XM(), new SHAIMAN_32x24(), new SMLX90621_RR(), new SMLX90621_YS(), new CHUWO_32x32(), new RE_XINGMA()
     };
 
     AlertDialog mDevicesDialog;
@@ -79,7 +79,7 @@ public class SerialActivity extends AppCompatActivity implements View.OnClickLis
         mRangeFinder.onMesure(new MesureResult<String>() {
             @Override
             public void onResult(String result) {
-                distanceText.setText(String.format("BP : %s cm",result));
+                distanceText.setText(String.format("BP : %s cm", result));
             }
         });
         mCurProduct = mSerialPorts[index];
