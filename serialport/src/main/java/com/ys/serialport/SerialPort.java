@@ -74,18 +74,20 @@ public class SerialPort {
      * @return
      */
     public byte[] read(long sleepms) {
-        if (mFileInputStream == null) return null;
         try {
-            if (mFileInputStream.available() > 0) {
+            if (mFileInputStream != null && mFileInputStream.available() > 0) {
                 SystemClock.sleep(sleepms);
-                if (mFileInputStream == null) return null;
-                byte[] buffer = new byte[mFileInputStream.available()];
-                mFileInputStream.read(buffer);
-                return buffer;
+                if (mFileInputStream != null) {
+                    byte[] buffer = new byte[mFileInputStream.available()];
+                    mFileInputStream.read(buffer);
+                    return buffer;
+                }
+                return null;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        SystemClock.sleep(sleepms);
         return null;
     }
 
