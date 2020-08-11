@@ -85,7 +85,7 @@ public class SThermometer extends MeasureDevice {
 
     @Override
     public void order(byte[] data) {
-        Log.d("sky","send data = " + DataFormatUtil.bytesToHex(data));
+//        Log.d("sky","send data = " + DataFormatUtil.bytesToHex(data));
         if (mEnabled && mSerialPort != null) {
             mSerialPort.write(data);
         }
@@ -102,6 +102,8 @@ public class SThermometer extends MeasureDevice {
 
     @Override
     public void destroy() {
+        if (mSerialPort != null) mSerialPort.release();
+        mSerialPort = null;
         if (mDataRead != null) mDataRead.interrupt();
         mDataRead = null;
         mStorager.exit();
