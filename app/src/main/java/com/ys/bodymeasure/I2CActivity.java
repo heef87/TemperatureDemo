@@ -7,12 +7,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.ys.temperaturelib.device.IPointThermometer;
 import com.ys.temperaturelib.device.MeasureDevice;
 import com.ys.temperaturelib.device.i2cmatrix.IAMG88XX_8x8_WZHY;
 import com.ys.temperaturelib.device.i2cmatrix.IMLX90621_16x4_BAA;
@@ -30,7 +30,6 @@ import com.ys.temperaturelib.device.i2cmatrix.IOTPA_16PV4A_16x16;
 import com.ys.temperaturelib.device.i2cmatrix.IRTX2080TI_16x16;
 import com.ys.temperaturelib.device.i2cpoint.IHM_TSEV01CL55_HLDL;
 import com.ys.temperaturelib.device.i2cpoint.IMLX90614;
-
 import com.ys.temperaturelib.range.MesureResult;
 import com.ys.temperaturelib.range.RangeFinder;
 import com.ys.temperaturelib.range.device.FileImpl;
@@ -133,7 +132,6 @@ public class I2CActivity extends AppCompatActivity implements View.OnClickListen
             mTemptakeDialog.show();
         }
     }
-
 
     private void setButtonValue(Button view) {
         curTempEntity = mCurProduct.getTakeTempEntity();

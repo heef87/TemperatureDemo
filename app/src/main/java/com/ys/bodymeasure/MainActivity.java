@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MainActivity extends PermissionActivity {
+
     AlertDialog mI2CDialog;
     AlertDialog mSerialDialog;
 

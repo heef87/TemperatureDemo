@@ -2,14 +2,13 @@ package com.ys.temperaturelib.device;
 
 import android.os.SystemClock;
 import android.text.TextUtils;
-
+import com.ys.temperaturelib.temperature.TakeTempEntity;
 import com.ys.temperaturelib.temperature.TemperatureEntity;
 import com.ys.temperaturelib.utils.FileUtil;
-
 import java.io.File;
 
-
 public class IPointThermometer extends MeasureDevice {
+
     File tempFile;
     boolean enabled;
     DataRead mDataRead;
@@ -39,7 +38,6 @@ public class IPointThermometer extends MeasureDevice {
 
     /**
      * 获取单点温度
-     *
      * @return
      */
     public TemperatureEntity getTemperature() {
@@ -50,6 +48,7 @@ public class IPointThermometer extends MeasureDevice {
             TemperatureEntity entity = new TemperatureEntity();
             entity.ta = Integer.parseInt(split[1]) / 100f;
             entity.temperatue = check(Integer.parseInt(split[0]) / 100f, entity);
+            entity.db = getTakeTempEntity().getDistances();
             return entity;
         }
         return null;
@@ -119,6 +118,9 @@ public class IPointThermometer extends MeasureDevice {
                 SystemClock.sleep(period);
                 if (isInterrupted) break;
                 TemperatureEntity entity = getTemperature();
+
+                TakeTempEntity takeTempEntity = getTakeTempEntity();
+
                 if (mResult != null && entity != null) mResult.onResult(entity, null);
                 if (mStorager != null) mStorager.add(entity);
             }

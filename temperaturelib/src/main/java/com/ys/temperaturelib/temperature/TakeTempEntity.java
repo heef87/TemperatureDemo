@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class TakeTempEntity implements Parcelable {
+
     int distances; //测量距离
     boolean isLight;//是否逆光
     float takeTemperature; //补偿温度

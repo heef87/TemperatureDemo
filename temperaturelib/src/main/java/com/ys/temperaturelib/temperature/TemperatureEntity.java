@@ -2,16 +2,17 @@ package com.ys.temperaturelib.temperature;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.List;
 
 public class TemperatureEntity implements Parcelable {
+
     public List<Float> tempList;
     public float max;
     public float min;
     public float ta;
     public float temperatue;
     public String sb;
+    public int db;
 
     public TemperatureEntity(){}
     protected TemperatureEntity(Parcel in) {
@@ -20,6 +21,7 @@ public class TemperatureEntity implements Parcelable {
         ta = in.readFloat();
         temperatue = in.readFloat();
         sb = in.readString();
+        db = in.readInt();
     }
 
     public static final Creator<TemperatureEntity> CREATOR = new Creator<TemperatureEntity>() {

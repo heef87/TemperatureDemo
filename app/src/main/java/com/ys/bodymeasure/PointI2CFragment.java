@@ -9,17 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.ys.temperaturelib.device.IPointThermometer;
 import com.ys.temperaturelib.device.MeasureResult;
 import com.ys.temperaturelib.temperature.TemperatureEntity;
-
 import java.text.DecimalFormat;
 
 public class PointI2CFragment extends BaseFragment {
+
     TextView measureText;
     EditText takeEdit;
     IPointThermometer mITemperatureDevice;
@@ -45,7 +43,6 @@ public class PointI2CFragment extends BaseFragment {
                 mHandler.sendMessage(message);
             }
         });
-
     }
 
     DecimalFormat fnum = new DecimalFormat("##0.00");

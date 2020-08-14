@@ -69,7 +69,7 @@ public class IMLX90614 extends IPointThermometer {
         } else if (distances >= 9 && distances <= 16) {
             takeTempEntity.setTakeTemperature(5.2f / 17 * distances + (0.4f - 41.6f / 17) - 0.4f);
         } else if (distances >= 17 && distances <= 24) {
-            takeTempEntity.setTakeTemperature(2f / 7 * distances - 13 / 7);
+            takeTempEntity.setTakeTemperature(2f / 7 * distances - 13 / 6);
         } else if (distances >= 25 && distances <= 30) {
             takeTempEntity.setTakeTemperature(0.2f * distances);
         } else if (distances > 30) {

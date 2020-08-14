@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-
 /**
  * Created by Administrator on 2018/4/18.
  */

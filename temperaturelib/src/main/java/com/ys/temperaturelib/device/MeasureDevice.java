@@ -9,6 +9,7 @@ import com.ys.temperaturelib.temperature.TemperatureEntity;
  * 用于设备数据读取、指令下发、参数设置。
  */
 public abstract class MeasureDevice {
+
     TakeTempEntity mTakeTempEntity; //温度补偿方案
     MeasureParm mMeasureParm; //测量温度热力图参数
 
