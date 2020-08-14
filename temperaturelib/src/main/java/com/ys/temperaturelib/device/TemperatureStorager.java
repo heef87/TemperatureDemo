@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class TemperatureStorager implements Runnable {
-
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
     String fileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/YsTemperature.txt";
     Queue<TemperatureEntity> mQueue = new LinkedList<>();
@@ -23,6 +22,7 @@ public class TemperatureStorager implements Runnable {
 
     public void add(String temp) {
         mQueue1.add(temp);
+
     }
 
     public void add(TemperatureEntity entity) {
@@ -53,27 +53,18 @@ public class TemperatureStorager implements Runnable {
                 StringBuffer mBuffer = new StringBuffer();
                 mBuffer.append(simpleDateFormat.format(new Date(System.currentTimeMillis())));
                 mBuffer.append(":");
-                mBuffer.append("TO: " + entity.temperatue + "°          ");
-                mBuffer.append("TA: " + entity.ta + "°         ");
-                mBuffer.append("MAX: " + entity.max + "°    ");
-                mBuffer.append("BP: " + entity.db + "cm");
-                mBuffer.append("\n");
-                //mBuffer.append("BP:" + );
-
-
-
 //                mBuffer.append(" MIN=" + fnum.format(entity.min));
 //                mBuffer.append(" MAX=" + fnum.format(entity.max));
 //                mBuffer.append("TA1=" + fnum.format(entity.ta));
 //                mBuffer.append("TO1=" + fnum.format(entity.temperatue));
-//                mBuffer.append("\n");
+                mBuffer.append("\n");
                 if(entity.tempList != null && entity.tempList.size() >= 6){
 //                    mBuffer.append(" List=" + entity.tempList.subList(0, 6));
 //                    mBuffer.append("\n");
                 }
                 if(poll != null){
-//                    mBuffer.append("TT1:" + poll);
-//                    mBuffer.append("\n");
+                    mBuffer.append("TT1:" + poll);
+                    mBuffer.append("\n");
                 }
                 FileUtil.writeFileAppend(fileName, mBuffer.toString());
             }

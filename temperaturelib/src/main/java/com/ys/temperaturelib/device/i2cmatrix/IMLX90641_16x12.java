@@ -2,17 +2,14 @@ package com.ys.temperaturelib.device.i2cmatrix;
 
 
 import android.util.Log;
-
 import com.ys.mlx90641.Mlx90641;
 import com.ys.temperaturelib.device.IMatrixThermometer;
 import com.ys.temperaturelib.temperature.MeasureParm;
+import com.ys.temperaturelib.temperature.TakeTempEntity;
 import com.ys.temperaturelib.temperature.TemperatureEntity;
 import com.ys.temperaturelib.temperature.TemperatureParser;
-import com.ys.temperaturelib.utils.DataFormatUtil;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class IMLX90641_16x12 extends IMatrixThermometer implements TemperatureParser<float[]> {
@@ -25,6 +22,33 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
         mMlx90641 = new Mlx90641();
         setParser(this);
         setMeasureParm(new MeasureParm(MODE_NAME, 50, 200, MATRIX_COUT_X, MATRIX_COUT_Y));
+        setTakeTempEntity(getDefaultTakeTempEntities()[0]);
+    }
+
+    @Override
+    public TakeTempEntity[] getDefaultTakeTempEntities() {
+        TakeTempEntity[] entities = new TakeTempEntity[5];
+        TakeTempEntity entity1 = new TakeTempEntity();
+        entity1.setDistances(30);
+        entity1.setTakeTemperature(0.3f);
+        entities[0] = entity1;
+        TakeTempEntity entity2 = new TakeTempEntity();
+        entity2.setDistances(40);
+        entity2.setTakeTemperature(0.4f);
+        entities[1] = entity2;
+        TakeTempEntity entity3 = new TakeTempEntity();
+        entity3.setDistances(50);
+        entity3.setTakeTemperature(0.5f);
+        entities[2] = entity3;
+        TakeTempEntity entity4 = new TakeTempEntity();
+        entity4.setDistances(60);
+        entity4.setTakeTemperature(0.6f);
+        entities[3] = entity4;
+        TakeTempEntity entity5 = new TakeTempEntity();
+        entity5.setDistances(70);
+        entity5.setTakeTemperature(0.7f);
+        entities[4] = entity5;
+        return entities;
     }
 
     @Override
@@ -79,7 +103,7 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
                 if (floats.get(i) < min) min = floats.get(i);
             }
 
-            float tt = (sum - max)/ 4f ; //+ takeTempEntity.getTakeTemperature();
+            float tt = (sum - max)/ 4f + getTakeTempEntity().getTakeTemperature();
 //            if (tt >= 34f && tt < 36f) {
 //                int tt1 = (int) (tt * 100);
 //                tt = Float.parseFloat("36." + String.valueOf(tt1).substring(2, 4));
