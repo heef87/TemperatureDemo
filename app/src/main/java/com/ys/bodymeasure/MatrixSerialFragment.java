@@ -139,6 +139,7 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
     public void onDestroyView() {
         super.onDestroyView();
         recycleBitmap();
+        if(handler != null)
         handler.removeCallbacks(sendDate);
     }
 

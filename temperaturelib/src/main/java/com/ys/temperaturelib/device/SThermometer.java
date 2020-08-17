@@ -142,7 +142,7 @@ public class SThermometer extends MeasureDevice {
         @Override
         public void run() {
             super.run();
-            while (true) {
+            while (!isInterrupted) {
                 if (mSerialPort != null) {
                     if (isWriteInThread && mOrder != null) {
                         mSerialPort.write(mOrder);
@@ -150,9 +150,9 @@ public class SThermometer extends MeasureDevice {
                     }
                     byte[] read = mSerialPort.read(period);
 //                    Log.d("sky","data11 = " + DataFormatUtil.bytesToHex(read));
-                    if (!isInterrupted && read != null && mParser != null) {
+                    if (read != null && read.length > 0 && mParser != null) {
                         byte[] oneFrame = mParser.oneFrame(read);
-                        if (oneFrame != null) {
+                        if (oneFrame != null && oneFrame.length > 0) {
                             TemperatureEntity entity = mParser.parse(oneFrame);
                             if (result != null && entity != null) result.onResult(entity, oneFrame);
                             if (mStorager != null) mStorager.add(entity);

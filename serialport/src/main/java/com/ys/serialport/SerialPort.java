@@ -26,6 +26,7 @@ public class SerialPort {
      */
     public boolean init(String device, int baudrat) {
         File file = new File(device);
+        if(!file.exists()) return false;
         if (!file.canRead() || !file.canWrite()) {
             try {
                 Process su;
