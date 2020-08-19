@@ -50,8 +50,7 @@ public class SThermometer extends MeasureDevice {
 
     @Override
     protected boolean init() {
-        if (mSerialPort != null) mSerialPort.release();
-        mSerialPort = null;
+        destroy();
         mSerialPort = new SerialPort();
         return mSerialPort.init(mDevice, mBaudrate);
     }
@@ -74,8 +73,6 @@ public class SThermometer extends MeasureDevice {
 
     @Override
     public void startUp(MeasureResult result, long period) {
-        if (mDataRead != null) mDataRead.interrupt();
-        mDataRead = null;
         mEnabled = init();
         if (mEnabled) {
             mDataRead = new DataRead(result, period);
@@ -106,6 +103,7 @@ public class SThermometer extends MeasureDevice {
         mSerialPort = null;
         if (mDataRead != null) mDataRead.interrupt();
         mDataRead = null;
+        if(mStorager != null)
         mStorager.exit();
         mStorager = null;
     }
