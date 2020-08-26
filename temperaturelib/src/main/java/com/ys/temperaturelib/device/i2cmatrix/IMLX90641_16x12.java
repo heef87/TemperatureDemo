@@ -21,7 +21,7 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
     public IMLX90641_16x12() {
         mMlx90641 = new Mlx90641();
         setParser(this);
-        setMeasureParm(new MeasureParm(MODE_NAME, 50, 200, MATRIX_COUT_X, MATRIX_COUT_Y));
+        setMeasureParm(new MeasureParm(MODE_NAME, 50, 250, MATRIX_COUT_X, MATRIX_COUT_Y));
         setTakeTempEntity(getDefaultTakeTempEntities()[0]);
     }
 
@@ -187,14 +187,14 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
             stringBuilder.append("\nTA： " + entity.ta);
             stringBuilder.append("\nmax：" + entity.max);
             stringBuilder.append("\nmin：" + entity.min);
-            stringBuilder.append("\n补偿的值：" + correctValue);
+//            stringBuilder.append("\n补偿的值：" + correctValue);
             stringBuilder.append("\n比TA值大1度之内的点数:" + getMaxCount(entity.ta,toDatas));
             stringBuilder.append("\n比max小1度之内的点数：" + maxCount);
             stringBuilder.append("\n比min大1度之内的点数：" + getMaxCount(entity.min,toDatas) + "\n");
             entity.sb = stringBuilder.toString();
 
             if (getStorager() != null)
-//                getStorager().add(stringBuilder.toString());
+                getStorager().add(stringBuilder.toString());
             return isvalid ? entity : null;
         }
         return null;

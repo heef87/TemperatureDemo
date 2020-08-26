@@ -24,8 +24,11 @@ public class TemperatureStorager implements Runnable {
 
     public void add(String temp) {
         if (!DEBUG) return;
+        if (mThread == null) {
+            mThread = new Thread(this);
+            mThread.start();
+        }
         mQueue1.add(temp);
-
     }
 
     public void add(TemperatureEntity entity) {
