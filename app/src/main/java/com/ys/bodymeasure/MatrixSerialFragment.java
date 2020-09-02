@@ -23,6 +23,7 @@ import com.ys.temperaturelib.device.serialport.CHUWO_32x32;
 import com.ys.temperaturelib.device.serialport.SHAIMAN_32x24;
 import com.ys.temperaturelib.device.serialport.SM23_32x32_XM;
 import com.ys.temperaturelib.device.serialport.ProductImp;
+import com.ys.temperaturelib.device.serialport.SMLX90621_HH;
 import com.ys.temperaturelib.device.serialport.SMLX90621_RR;
 import com.ys.temperaturelib.device.serialport.SYM32A_32x32_XM;
 import com.ys.temperaturelib.device.MeasureResult;
@@ -166,7 +167,8 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
 
     private boolean isQueryAotu() {
         return mSerialProduct instanceof SM23_32x32_XM || mSerialProduct instanceof SHAIMAN_32x24
-                || mSerialProduct instanceof SMLX90621_RR || mSerialProduct instanceof CHUWO_32x32;
+                || mSerialProduct instanceof SMLX90621_RR || mSerialProduct instanceof CHUWO_32x32
+                || mSerialProduct instanceof SMLX90621_HH;
     }
 
     private Handler handler;
