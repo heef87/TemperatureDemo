@@ -27,6 +27,7 @@ import com.ys.temperaturelib.device.i2cmatrix.IOMRON_32x32;
 import com.ys.temperaturelib.device.i2cmatrix.IOMROND6T_8L_8x1_HG;
 import com.ys.temperaturelib.device.i2cmatrix.IOMRON_4x4;
 import com.ys.temperaturelib.device.i2cmatrix.IOTPA_16PV4A_16x16;
+import com.ys.temperaturelib.device.i2cmatrix.IOTPA_16_R2_16x16;
 import com.ys.temperaturelib.device.i2cmatrix.IRTX2080TI_16x16;
 import com.ys.temperaturelib.device.i2cpoint.IHM_TSEV01CL55_HLDL;
 import com.ys.temperaturelib.device.i2cpoint.IMLX90614;
@@ -47,12 +48,12 @@ public class I2CActivity extends AppCompatActivity implements View.OnClickListen
             IMLX90640_32x24_0AB1543001.MODE_NAME, IMLX90640_32x24_0AB1501502.MODE_NAME, IMLX90640_32x24_0AB1435407.MODE_NAME,
             IMLX90640_32x24_OAA1547511.MODE_NAME, IMLX90640_32x24_OAA1586901.MODE_NAME, IMLX90621_16x4_YS.MODE_NAME, IAMG88XX_8x8_WZHY.MODE_NAME,
             IOMROND6T_8L_8x1_HG.MODE_NAME, IOMRON_4x4.MODE_NAME, IOMRON_32x32.MODE_NAME, IRTX2080TI_16x16.MODE_NAME, IMLX90641_16x12.MODE_NAME
-            , IOTPA_16PV4A_16x16.MODE_NAME, IMLX90621_16x4_BAA.MODE_NAME};
+            , IOTPA_16PV4A_16x16.MODE_NAME, IMLX90621_16x4_BAA.MODE_NAME, IOTPA_16_R2_16x16.MODE_NAME};
     private MeasureDevice[] i2cDevices = new MeasureDevice[]{new IHM_TSEV01CL55_HLDL(), new IMLX90614(),
             new IMLX90640_32x24_0AB1543001(), new IMLX90640_32x24_0AB1501502(), new IMLX90640_32x24_0AB1435407(),
             new IMLX90640_32x24_OAA1547511(), new IMLX90640_32x24_OAA1586901(), new IMLX90621_16x4_YS(), new IAMG88XX_8x8_WZHY(),
             new IOMROND6T_8L_8x1_HG(), new IOMRON_4x4(), new IOMRON_32x32(), new IRTX2080TI_16x16(), new IMLX90641_16x12()
-            , new IOTPA_16PV4A_16x16(),new IMLX90621_16x4_BAA()};
+            , new IOTPA_16PV4A_16x16(), new IMLX90621_16x4_BAA(), new IOTPA_16_R2_16x16()};
     private Button mTakeButton;
     private CheckBox mLightButton;
     private TextView distanceText;
@@ -81,9 +82,9 @@ public class I2CActivity extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onResult(String result) {
                 distanceText.setText(String.format("BP : %s cm", result));
-                if(mCurProduct != null) {
+                if (mCurProduct != null) {
                     TakeTempEntity takeTempEntity = mCurProduct.getTakeTempEntity();
-                    if(takeTempEntity == null){
+                    if (takeTempEntity == null) {
                         takeTempEntity = new TakeTempEntity();
                     }
                     takeTempEntity.setDistances(Integer.parseInt(result));

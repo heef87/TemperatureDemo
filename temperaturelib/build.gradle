@@ -42,6 +42,7 @@ dependencies {
     implementation files('libs\\omron.jar')
     implementation files('libs\\ImiSDK.jar')
     implementation files('libs\\serialport.jar')
+    implementation files('libs\\otpa16r2.jar')
 
     //    implementation project(path: ':imlx90640')
 //    implementation project(path: ':omron')
