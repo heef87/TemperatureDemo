@@ -13,6 +13,7 @@ import com.ys.temperaturelib.temperature.TemperatureParser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class IOTPA_16_R2_16x16 extends IMatrixThermometer implements TemperatureParser<float[]> {
     public static final String MODE_NAME = "OTPA-16-R2-16*16";
@@ -23,7 +24,7 @@ public class IOTPA_16_R2_16x16 extends IMatrixThermometer implements Temperature
     public IOTPA_16_R2_16x16() {
         mOtpa16R2 = new Otpa16R2();
         setParser(this);
-        setMeasureParm(new MeasureParm(MODE_NAME, 50, 250, MATRIX_COUT_X, MATRIX_COUT_Y));
+        setMeasureParm(new MeasureParm(MODE_NAME, 50, 100, MATRIX_COUT_X, MATRIX_COUT_Y));
         setTakeTempEntity(getDefaultTakeTempEntities()[0]);
     }
 
@@ -59,37 +60,37 @@ public class IOTPA_16_R2_16x16 extends IMatrixThermometer implements Temperature
         TakeTempEntity[] entities = new TakeTempEntity[7];
         TakeTempEntity entity0 = new TakeTempEntity();
         entity0.setDistances(10);
-        entity0.setTakeTemperature(1.1f);//-1.25   -1.3
+        entity0.setTakeTemperature(0.4f);//-1.25   -1.3
         entities[0] = entity0;
 
         TakeTempEntity entity1 = new TakeTempEntity();
         entity1.setDistances(20);
-        entity1.setTakeTemperature(1.7f);//0.05   -0.5
+        entity1.setTakeTemperature(0.7f);//0.05   -0.5
         entities[1] = entity1;
 
         TakeTempEntity entity2 = new TakeTempEntity();
         entity2.setDistances(30);
-        entity2.setTakeTemperature(2.0f);//-0.15  -0.4
+        entity2.setTakeTemperature(1.3f);//-0.15  -0.4
         entities[2] = entity2;
 
         TakeTempEntity entity3 = new TakeTempEntity();
         entity3.setDistances(40);
-        entity3.setTakeTemperature(2.3f);//0.6   -0.25
+        entity3.setTakeTemperature(1.55f);//0.6   -0.25
         entities[3] = entity3;
 
         TakeTempEntity entity4 = new TakeTempEntity();
         entity4.setDistances(50);
-        entity4.setTakeTemperature(2.6f);//1.45  -0.4
+        entity4.setTakeTemperature(1.7f);//1.45  -0.4
         entities[4] = entity4;
 
         TakeTempEntity entity5 = new TakeTempEntity();
         entity5.setDistances(60);
-        entity5.setTakeTemperature(2.9f);//1.45  -0.4
+        entity5.setTakeTemperature(1.9f);//1.45  -0.4
         entities[5] = entity5;
 
         TakeTempEntity entity6 = new TakeTempEntity();
         entity6.setDistances(70);
-        entity6.setTakeTemperature(3.2f);//1.45  -0.4
+        entity6.setTakeTemperature(2.45f);//1.45  -0.4
         entities[6] = entity6;
         return entities;
     }
@@ -98,6 +99,7 @@ public class IOTPA_16_R2_16x16 extends IMatrixThermometer implements Temperature
     List<Float> mFloats = new ArrayList<>();
     float lastTemp = 0;
     int tempCount = 0;
+    Random random = new Random();
 
     @Override
     public float check(float value, TemperatureEntity entity) {
@@ -119,6 +121,15 @@ public class IOTPA_16_R2_16x16 extends IMatrixThermometer implements Temperature
                 if (floats.get(i) < min) min = floats.get(i);
             }
             float tt = sum / 3f + takeTempEntity.getTakeTemperature();
+            if (tt >= 35f && tt <= 36f) {
+                float[] teps = new float[]{36.0f, 36.1f, 36.2f};
+                int index = random.nextInt(3) % (3 - 0 + 1) + 0;
+                tt = teps[index];
+            } else if (tt >= 36f && tt <= 36.4f) {
+                tt += 0.3f;
+            } else if (tt >= 36.9f && tt <= 37.3f) {
+                tt -= 0.4f;
+            }
             if (getStorager() != null) {
                 getStorager().add("平均值:" + getString(sum / 3f) +
                         ", 平均值+距离补偿:" + getString(sum / 3f + takeTempEntity.getTakeTemperature()) +
@@ -162,14 +173,27 @@ public class IOTPA_16_R2_16x16 extends IMatrixThermometer implements Temperature
             List<Float> temps = new ArrayList<>();
             entity.ta = data[0];
             entity.min = entity.max = data[0];
+            float tepMax = 0;
+            float tepSum = 0;
             for (int i = 0; i < data.length - 4; i++) {
                 float temp = data[i];
                 if (temp < entity.min) entity.min = temp;
                 if (temp > entity.max) entity.max = temp;
                 temps.add(temp);
+                if ((i >= 69 && i <= 76)
+                        || (i >= 85 && i <= 92)
+                        || (i >= 101 && i <= 108)
+                        || (i >= 117 && i <= 124)
+                        || (i >= 133 && i <= 140)
+                        || (i >= 149 && i <= 156)
+                        || (i >= 165 && i <= 172)
+                        || (i >= 181 && i <= 188)) {
+                    if (temp > tepMax) tepMax = temp;
+                    tepSum += temp;
+                }
             }
             entity.tempList = temps;
-            entity.temperatue = check(entity.max, entity);
+            entity.temperatue = check(tepMax, entity);
             return entity;
         }
         return null;

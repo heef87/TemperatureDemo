@@ -7,7 +7,7 @@ int ParseTemperature(PRtx2080ti_readoutdata data)
 	float pixel=0;
 	int i=-1;
 	if(data->Header.Delimeter!=0x2||data->Header.Stop!=0x3) return -1;
-	AMB=(data->Ambient.AMB_H*256+data->Ambient.AMB_L-27315)/100;
+	AMB=(data->Ambient.AMB_H*256+data->Ambient.AMB_L-27315)/100.0;
 	temp.AMB=AMB;
 	while(i++<255)
 	{
