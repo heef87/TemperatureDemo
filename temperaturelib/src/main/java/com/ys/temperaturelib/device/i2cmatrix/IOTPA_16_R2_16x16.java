@@ -1,8 +1,5 @@
 package com.ys.temperaturelib.device.i2cmatrix;
 
-
-import android.util.Log;
-
 import com.ys.otpa16r2.Otpa16R2;
 import com.ys.rtx2080ti.Rtx2080ti;
 import com.ys.temperaturelib.device.IMatrixThermometer;
@@ -180,14 +177,18 @@ public class IOTPA_16_R2_16x16 extends IMatrixThermometer implements Temperature
                 if (temp < entity.min) entity.min = temp;
                 if (temp > entity.max) entity.max = temp;
                 temps.add(temp);
-                if ((i >= 69 && i <= 76)
-                        || (i >= 85 && i <= 92)
-                        || (i >= 101 && i <= 108)
-                        || (i >= 117 && i <= 124)
-                        || (i >= 133 && i <= 140)
-                        || (i >= 149 && i <= 156)
-                        || (i >= 165 && i <= 172)
-                        || (i >= 181 && i <= 188)) {
+                if ((i >= 35 && i <= 46)
+                        || (i >= 51 && i <= 62)
+                        || (i >= 67 && i <= 78)
+                        || (i >= 83 && i <= 94)
+                        || (i >= 99 && i <= 110)
+                        || (i >= 115 && i <= 126)
+                        || (i >= 131 && i <= 142)
+                        || (i >= 147 && i <= 158)
+                        || (i >= 163 && i <= 174)
+                        || (i >= 179 && i <= 190)
+                        || (i >= 195 && i <= 206)
+                        || (i >= 211 && i <= 222)) {
                     if (temp > tepMax) tepMax = temp;
                     tepSum += temp;
                 }
