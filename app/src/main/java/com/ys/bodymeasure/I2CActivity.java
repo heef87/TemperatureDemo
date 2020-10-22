@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.ys.temperaturelib.device.MeasureDevice;
 import com.ys.temperaturelib.device.i2cmatrix.IAMG88XX_8x8_WZHY;
+import com.ys.temperaturelib.device.i2cmatrix.IHTPA_32x32;
 import com.ys.temperaturelib.device.i2cmatrix.IMLX90621_16x4_BAA;
 import com.ys.temperaturelib.device.i2cmatrix.IMLX90621_16x4_YS;
 import com.ys.temperaturelib.device.i2cmatrix.IMLX90640_32x24_0AB1435407;
@@ -48,12 +49,12 @@ public class I2CActivity extends AppCompatActivity implements View.OnClickListen
             IMLX90640_32x24_0AB1543001.MODE_NAME, IMLX90640_32x24_0AB1501502.MODE_NAME, IMLX90640_32x24_0AB1435407.MODE_NAME,
             IMLX90640_32x24_OAA1547511.MODE_NAME, IMLX90640_32x24_OAA1586901.MODE_NAME, IMLX90621_16x4_YS.MODE_NAME, IAMG88XX_8x8_WZHY.MODE_NAME,
             IOMROND6T_8L_8x1_HG.MODE_NAME, IOMRON_4x4.MODE_NAME, IOMRON_32x32.MODE_NAME, IRTX2080TI_16x16.MODE_NAME, IMLX90641_16x12.MODE_NAME
-            , IOTPA_16PV4A_16x16.MODE_NAME, IMLX90621_16x4_BAA.MODE_NAME, IOTPA_16_R2_16x16.MODE_NAME};
+            , IOTPA_16PV4A_16x16.MODE_NAME, IMLX90621_16x4_BAA.MODE_NAME, IOTPA_16_R2_16x16.MODE_NAME, IHTPA_32x32.MODE_NAME};
     private MeasureDevice[] i2cDevices = new MeasureDevice[]{new IHM_TSEV01CL55_HLDL(), new IMLX90614(),
             new IMLX90640_32x24_0AB1543001(), new IMLX90640_32x24_0AB1501502(), new IMLX90640_32x24_0AB1435407(),
             new IMLX90640_32x24_OAA1547511(), new IMLX90640_32x24_OAA1586901(), new IMLX90621_16x4_YS(), new IAMG88XX_8x8_WZHY(),
             new IOMROND6T_8L_8x1_HG(), new IOMRON_4x4(), new IOMRON_32x32(), new IRTX2080TI_16x16(), new IMLX90641_16x12()
-            , new IOTPA_16PV4A_16x16(), new IMLX90621_16x4_BAA(), new IOTPA_16_R2_16x16()};
+            , new IOTPA_16PV4A_16x16(), new IMLX90621_16x4_BAA(), new IOTPA_16_R2_16x16(), new IHTPA_32x32()};
     private Button mTakeButton;
     private CheckBox mLightButton;
     private TextView distanceText;
@@ -148,6 +149,8 @@ public class I2CActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        mCurProduct.getTakeTempEntity().setLight(!b);
+        TakeTempEntity takeTempEntity = mCurProduct.getTakeTempEntity();
+        if (takeTempEntity != null)
+            takeTempEntity.setLight(!b);
     }
 }

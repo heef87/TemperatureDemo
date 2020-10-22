@@ -43,8 +43,10 @@ dependencies {
     implementation files('libs\\ImiSDK.jar')
     implementation files('libs\\serialport.jar')
     implementation files('libs\\otpa16r2.jar')
+    implementation files('libs\\libhtpa3232.jar')
 
-    //    implementation project(path: ':imlx90640')
+//    implementation project(path: ':libhtpa3232')
+//    implementation project(path: ':imlx90640')
 //    implementation project(path: ':omron')
 //    implementation project(path: ':imlx90641')
 //    implementation project(path: ':amg88xx')
