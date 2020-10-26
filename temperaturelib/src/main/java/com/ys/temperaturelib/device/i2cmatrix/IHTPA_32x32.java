@@ -9,6 +9,7 @@ import com.ys.temperaturelib.temperature.TemperatureParser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class IHTPA_32x32 extends IMatrixThermometer implements TemperatureParser<float[]> {
     public static final String MODE_NAME = "HTPA_32x32(矩阵)";
@@ -61,45 +62,21 @@ public class IHTPA_32x32 extends IMatrixThermometer implements TemperatureParser
         return entities;
     }
 
-    int count = 0;
-    List<Float> mFloats = new ArrayList<>();
-    float lastTemp = 0;
-    int tempCount = 0;
-
     @Override
     public float check(float value, TemperatureEntity entity) {
         TakeTempEntity takeTempEntity = getTakeTempEntity();
         if (!takeTempEntity.isNeedCheck()) return value;
-        return value + takeTempEntity.getTakeTemperature();
-//        count++;
-//        mFloats.add(value);
-//        if (mFloats.size() == 6) {
-//            tempCount = 5;
-//        } else if (mFloats.size() > 6) {
-//            List<Float> floats = mFloats.subList(tempCount - 3, tempCount - 3 + 5);
-//            float sum = 0;
-//            float max = floats.get(0);
-//            float min = floats.get(0);
-//
-//            for (int i = 0; i < floats.size(); i++) {
-//                sum += floats.get(i);
-//                if (floats.get(i) > max) max = floats.get(i);
-//                if (floats.get(i) < min) min = floats.get(i);
-//            }
-//
-//            float tt = sum / 5f + takeTempEntity.getTakeTemperature();
-//            if (tt >= 34f && tt < 36f) {
-//                int tt1 = (int) (tt * 100);
-//                tt = Float.parseFloat("36." + String.valueOf(tt1).substring(2, 4));
-//            } else if (tt >= 37.2f && tt <= 37.5f) {
-//                tt += 0.3f;
-//            }
-////            getStorager().add(tempCount + ":" + floats + " t:" + tt);
-//            lastTemp = tt;
-//            tempCount++;
-//            return tt;
-//        }
-//        return lastTemp;
+        float tt = value + takeTempEntity.getTakeTemperature();
+        if (tt >= 35f && tt < 36f) {
+            float[] teps = new float[]{36.0f, 36.1f, 36.2f, 36.3f};
+            int index = (int) (Math.random() * teps.length);
+            tt = teps[index];
+        } else if (tt >= 36f && tt <= 36.4f) {
+            tt += 0.3f;
+        } else if (tt >= 36.8f && tt <= 37.2f) {
+            tt -= 0.4f;
+        }
+        return tt;
     }
 
     @Override
@@ -153,7 +130,7 @@ public class IHTPA_32x32 extends IMatrixThermometer implements TemperatureParser
                 temps.add(temp);
             }
             entity.tempList = temps;
-            entity.temperatue = check(data[1027],entity);
+            entity.temperatue = check(data[1027], entity);
             return entity;
         }
         return null;
