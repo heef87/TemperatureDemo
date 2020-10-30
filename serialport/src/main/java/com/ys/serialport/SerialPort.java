@@ -26,7 +26,7 @@ public class SerialPort {
      */
     public boolean init(String device, int baudrat) {
         File file = new File(device);
-        if(!file.exists()) return false;
+        if (!file.exists()) return false;
         if (!file.canRead() || !file.canWrite()) {
             try {
                 Process su;
@@ -67,6 +67,19 @@ public class SerialPort {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public byte[] read() {
+        try {
+            if (mFileInputStream != null) {
+                byte[] buffer = new byte[mFileInputStream.available()];
+                mFileInputStream.read(buffer);
+                return buffer;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

@@ -19,8 +19,9 @@ public class SThermometer extends MeasureDevice {
             "600", "1200", "1800", "2400", "4800", "9600", "19200", "38400", "57600", "115200", "230400",
             "460800", "500000", "576000", "921600", "1000000", "1152000", "1500000", "2000000",
             "2500000", "3000000", "3500000", "4000000"};
-    public static String[] DEVICES = new String[]{"dev/ttyS0","dev/ttyS1","dev/ttyS2","dev/ttyS3",
-            "dev/ttyS4","dev/ttyGS0","dev/ttyGS1","dev/ttyGS2","dev/ttyGS3","dev/ttyFIQ0"};
+    public static String[] DEVICES = new String[]{"dev/ttyS0", "dev/ttyS1", "dev/ttyS2", "dev/ttyS3",
+            "dev/ttyS4", "dev/ttyGS0", "dev/ttyGS1", "dev/ttyGS2", "dev/ttyGS3", "dev/ttyFIQ0"};
+
     public static String[] getDevices() {
         String result = FileUtil.exec("find /dev/ -name \"tty*\"");
         if (TextUtils.isEmpty(result)) return null;
@@ -37,15 +38,22 @@ public class SThermometer extends MeasureDevice {
     TemperatureStorager mStorager;
     boolean isWriteInThread = false;
     byte[] mOrder;
+    boolean bigData = true;
 
     public SThermometer() {
         mStorager = new TemperatureStorager();
     }
-    public TemperatureStorager getStorager(){
+
+    public TemperatureStorager getStorager() {
         return mStorager;
     }
+
     public void setTemperatureParser(TemperatureParser<byte[]> parser) {
         mParser = parser;
+    }
+
+    public void setBigData(boolean bigData) {
+        this.bigData = bigData;
     }
 
     @Override
@@ -82,7 +90,7 @@ public class SThermometer extends MeasureDevice {
 
     @Override
     public void order(byte[] data) {
-//        Log.d("sky","send data = " + DataFormatUtil.bytesToHex(data));
+//        Log.d("sky", "send data = " + DataFormatUtil.bytesToHex(data));
         if (mEnabled && mSerialPort != null) {
             mSerialPort.write(data);
         }
@@ -103,13 +111,13 @@ public class SThermometer extends MeasureDevice {
         mSerialPort = null;
         if (mDataRead != null) mDataRead.interrupt();
         mDataRead = null;
-        if(mStorager != null)
-        mStorager.exit();
+        if (mStorager != null)
+            mStorager.exit();
         mStorager = null;
     }
 
     @Override
-    public float check(float value,TemperatureEntity entity) {
+    public float check(float value, TemperatureEntity entity) {
         return value;
     }
 
@@ -146,8 +154,10 @@ public class SThermometer extends MeasureDevice {
                         mSerialPort.write(mOrder);
                         SystemClock.sleep(20);
                     }
-                    byte[] read = mSerialPort.read(period);
-//                    Log.d("sky","data11 = " + DataFormatUtil.bytesToHex(read));
+                    byte[] read = null;
+                    if (bigData) read = mSerialPort.read(period);
+                    else read = mSerialPort.read();
+//                    Log.d("sky", "data11 = " + DataFormatUtil.bytesToHex(read));
                     if (read != null && read.length > 0 && mParser != null) {
                         byte[] oneFrame = mParser.oneFrame(read);
                         if (oneFrame != null && oneFrame.length > 0) {
@@ -160,7 +170,8 @@ public class SThermometer extends MeasureDevice {
                 if (isInterrupted) {
                     break;
                 }
-//                SystemClock.sleep(period);
+                if (!bigData)
+                    SystemClock.sleep(period);
             }
         }
     }
