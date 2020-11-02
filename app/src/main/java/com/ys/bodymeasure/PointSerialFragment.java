@@ -16,6 +16,7 @@ import com.ys.temperaturelib.device.MeasureResult;
 import com.ys.temperaturelib.device.serialport.ProductImp;
 import com.ys.temperaturelib.device.serialport.RE_XINGMA;
 import com.ys.temperaturelib.device.serialport.SLSC_HM_32x32;
+import com.ys.temperaturelib.device.serialport.SMLX90641_STM32;
 import com.ys.temperaturelib.temperature.TemperatureEntity;
 import com.ys.temperaturelib.utils.DataFormatUtil;
 
@@ -43,6 +44,9 @@ public class PointSerialFragment extends BaseFragment {
                 || mSerialProduct instanceof RE_XINGMA) {
             handler = new Handler();
             handler.post(sendData);
+        } else if (mSerialProduct instanceof SMLX90641_STM32) {
+            byte[] order = mSerialProduct.getOrderDataOutputQuery();
+            mSerialProduct.order(order);
         }
     }
 
