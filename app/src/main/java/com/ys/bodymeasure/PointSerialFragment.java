@@ -40,26 +40,10 @@ public class PointSerialFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         mSerialProduct = ((SerialActivity) getActivity()).getCurProduct();
         measure(mSerialProduct.getDevice(), mSerialProduct.getBaudrate());
-        if ((mSerialProduct instanceof SLSC_HM_32x32)
-                || mSerialProduct instanceof RE_XINGMA) {
-            handler = new Handler();
-            handler.post(sendData);
-        } else if (mSerialProduct instanceof SMLX90641_STM32) {
-            byte[] order = mSerialProduct.getOrderDataOutputQuery();
-            mSerialProduct.order(order);
-        }
+        byte[] order = mSerialProduct.getOrderDataOutputQuery();
+        mSerialProduct.order(order);
     }
 
-    private Runnable sendData = new Runnable() {
-        @Override
-        public void run() {
-            if (mSerialProduct != null) {
-                byte[] order = mSerialProduct.getOrderDataOutputQuery();
-                mSerialProduct.order(order);
-                handler.postDelayed(sendData, 500);
-            }
-        }
-    };
 
     @Override
     public void measure(String devicePath, int deviceRate) {
@@ -90,7 +74,6 @@ public class PointSerialFragment extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        handler.removeCallbacks(sendData);
         super.onDestroy();
     }
 }
