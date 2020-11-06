@@ -36,7 +36,7 @@ public class SThermometer extends MeasureDevice {
     int mBaudrate;
     TemperatureParser<byte[]> mParser;
     TemperatureStorager mStorager;
-    boolean isWriteInThread = false;
+    boolean isLoop = false;
     byte[] mOrder;
     boolean bigData = true;
 
@@ -94,15 +94,15 @@ public class SThermometer extends MeasureDevice {
         if (mEnabled && mSerialPort != null) {
             mSerialPort.write(data);
         }
-        if (isWriteInThread)
+        if (isLoop)
             mOrder = data;
     }
 
     /**
-     * 设置在子线程中写命令
+     * 设置循环查询指令
      */
-    public void setWriteInThread(boolean isWriteInThread) {
-        this.isWriteInThread = isWriteInThread;
+    public void setQureyInLoop(boolean isLoop) {
+        this.isLoop = isLoop;
     }
 
     @Override
@@ -150,7 +150,7 @@ public class SThermometer extends MeasureDevice {
             super.run();
             while (!isInterrupted) {
                 if (mSerialPort != null) {
-                    if (isWriteInThread && mOrder != null) {
+                    if (isLoop && mOrder != null) {
                         mSerialPort.write(mOrder);
                         SystemClock.sleep(20);
                     }

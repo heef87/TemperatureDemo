@@ -18,6 +18,7 @@ public class RE_XINGMA extends ProductImp implements TemperatureParser<byte[]> {
         super(DEFAULT_DEVICE, DEFAULT_RATE,
                 new MeasureParm(DEFAULT_MODE_NAME, 24, 250, MATRIX_COUT_X, MATRIX_COUT_Y));
         setTemperatureParser(this);
+        setQureyInLoop(true);
     }
 
     @Override

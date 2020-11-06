@@ -25,6 +25,7 @@ public class SM23_32x32_XM extends ProductImp implements TemperatureParser<byte[
         super(DEFAULT_DEVICE, DEFAULT_RATE,
                 new MeasureParm(DEFAULT_MODE_NAME, 24, 300, MATRIX_COUT_X, MATRIX_COUT_Y));
         setTemperatureParser(this);
+        setQureyInLoop(true);
     }
 
     @Override

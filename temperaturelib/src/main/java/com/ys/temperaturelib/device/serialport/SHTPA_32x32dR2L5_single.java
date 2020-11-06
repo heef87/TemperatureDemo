@@ -25,7 +25,7 @@ public class SHTPA_32x32dR2L5_single extends ProductImp implements TemperaturePa
                 new MeasureParm(DEFAULT_MODE_NAME, 50, 100, MATRIX_COUT_X, MATRIX_COUT_Y));
         setTemperatureParser(this);
         setTakeTempEntity(getDefaultTakeTempEntities()[0]);
-        setWriteInThread(true);
+        setQureyInLoop(true);
     }
 
     @Override

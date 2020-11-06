@@ -29,6 +29,7 @@ public class SHAIMAN_32x24 extends ProductImp implements TemperatureParser<byte[
         setTemperatureParser(this);
         Arrays.fill(temps, 20f);
         setTakeTempEntity(getDefaultTakeTempEntities()[0]);
+        setQureyInLoop(true);
     }
 
     @Override

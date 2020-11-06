@@ -24,6 +24,7 @@ public class SMLX90621_RR extends ProductImp implements TemperatureParser<byte[]
                 new MeasureParm(DEFAULT_MODE_NAME, 50, 100, MATRIX_COUT_X, MATRIX_COUT_Y));
         setTemperatureParser(this);
         setTakeTempEntity(getDefaultTakeTempEntities()[0]);
+        setQureyInLoop(true);
     }
 
     @Override

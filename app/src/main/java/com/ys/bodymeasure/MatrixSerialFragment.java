@@ -85,9 +85,6 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
 
     private void checkOrder() {
         byte[] order = mSerialProduct.getOrderDataOutputType(isAuto);
-        if (isQueryAotu()) {
-            mSerialProduct.setWriteInThread(isAuto);
-        }
         onOrder(order);
     }
 
@@ -159,16 +156,7 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
     public void onClick(final View view) {
         if (isAuto || mSerialProduct == null) return;
         byte[] order = mSerialProduct.getOrderDataOutputQuery();
-        if (isQueryAotu()) {
-            mSerialProduct.setWriteInThread(isAuto);
-        }
         onOrder(order);
-    }
-
-    private boolean isQueryAotu() {
-        return mSerialProduct instanceof SM23_32x32_XM || mSerialProduct instanceof SHAIMAN_32x24
-                || mSerialProduct instanceof SMLX90621_RR || mSerialProduct instanceof CHUWO_32x32
-                || mSerialProduct instanceof SMLX90621_HH;
     }
 
     private Handler handler;
