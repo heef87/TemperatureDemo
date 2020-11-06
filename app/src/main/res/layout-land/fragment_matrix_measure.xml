@@ -5,79 +5,115 @@
     android:gravity="center"
     android:orientation="horizontal">
 
+    <com.ys.temperaturelib.heatmap.maxtrix.MatrixView
+        android:id="@+id/measure_data_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
     <ImageView
         android:id="@+id/measure_data_img"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1.5"></ImageView>
+        android:layout_weight="1"
+        android:visibility="gone"></ImageView>
 
     <TextView
         android:id="@+id/measure_data_text"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.8"
-        android:scrollbars="vertical"></TextView>
+        android:scrollbars="vertical"
+        android:visibility="gone"></TextView>
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="0.5"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:orientation="vertical">
 
-        <CheckBox
-            android:id="@+id/measure_data_mode"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="自动输出"></CheckBox>
+            android:layout_gravity="top"
+            android:orientation="vertical"
+            android:paddingRight="20dp">
 
-        <Button
-            android:id="@+id/measure_data_send"
+            <!--        <TextView-->
+            <!--            android:id="@+id/measure_data_min"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="0dp"-->
+            <!--            android:layout_weight="1"-->
+            <!--            android:textColor="@android:color/holo_blue_bright"-->
+            <!--            android:textSize="20sp"></TextView>-->
+
+            <!--        <TextView-->
+            <!--            android:id="@+id/measure_data_max"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="0dp"-->
+            <!--            android:layout_weight="1"-->
+            <!--            android:textColor="@android:color/holo_red_light"-->
+            <!--            android:textSize="20sp"></TextView>-->
+            <TextView
+                android:id="@+id/measure_data_to"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/holo_green_light"
+                android:textSize="20sp"></TextView>
+
+            <TextView
+                android:id="@+id/measure_data_ta"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/holo_green_light"
+                android:textSize="20sp"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="发送"></Button>
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:paddingRight="20dp">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.5"
-        android:orientation="vertical"
-        android:padding="20dp">
+            <RadioGroup
+                android:id="@+id/measure_view_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/measure_data_min"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="0dp"-->
-        <!--            android:layout_weight="1"-->
-        <!--            android:textColor="@android:color/holo_blue_bright"-->
-        <!--            android:textSize="20sp"></TextView>-->
+                <RadioButton
+                    android:id="@+id/measure_view_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="网格图"
+                    android:textColor="@android:color/holo_green_light"
+                    android:textSize="12sp"></RadioButton>
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/measure_data_max"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="0dp"-->
-        <!--            android:layout_weight="1"-->
-        <!--            android:textColor="@android:color/holo_red_light"-->
-        <!--            android:textSize="20sp"></TextView>-->
-        <TextView
-            android:id="@+id/measure_data_to"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textColor="@android:color/holo_green_light"
-            android:textSize="20sp"></TextView>
+                <RadioButton
+                    android:id="@+id/measure_view_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="热力图"
+                    android:textColor="@android:color/holo_green_light"
+                    android:textSize="12sp"></RadioButton>
+            </RadioGroup>
 
-        <TextView
-            android:id="@+id/measure_data_ta"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textColor="@android:color/holo_green_light"
-            android:textSize="20sp"></TextView>
+            <CheckBox
+                android:id="@+id/measure_data_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="自动输出"></CheckBox>
 
-
+            <Button
+                android:id="@+id/measure_data_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="发送"></Button>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

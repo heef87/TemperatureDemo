@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,8 @@ import com.ys.temperaturelib.device.serialport.SMLX90621_RR;
 import com.ys.temperaturelib.device.serialport.SYM32A_32x32_XM;
 import com.ys.temperaturelib.device.MeasureResult;
 import com.ys.temperaturelib.heatmap.DefaultHeatMap;
+import com.ys.temperaturelib.heatmap.maxtrix.MatrixView;
+import com.ys.temperaturelib.temperature.MeasureParm;
 import com.ys.temperaturelib.temperature.TemperatureEntity;
 import com.ys.temperaturelib.utils.DataFormatUtil;
 
@@ -35,6 +38,7 @@ import java.text.DecimalFormat;
 
 
 public class MatrixSerialFragment extends BaseFragment implements View.OnClickListener {
+    private RadioGroup mRadioGroup;
     private TextView mDataText;
     private TextView mTaText;
     private TextView mToText;
@@ -44,11 +48,16 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
     DefaultHeatMap mHeatMap;
     private boolean isAuto;
     ProductImp mSerialProduct;
+    private MatrixView mMatrixView;
+    private boolean isStop = false;
+    private boolean showHotMap = false;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.fragment_matrix_measure, container, false);
+        mMatrixView = inflate.findViewById(R.id.measure_data_view);
+        mRadioGroup = inflate.findViewById(R.id.measure_view_select);
         mCheckBox = inflate.findViewById(R.id.measure_data_mode);
         mDataImageView = inflate.findViewById(R.id.measure_data_img);
         mTaText = inflate.findViewById(R.id.measure_data_ta);
@@ -66,6 +75,26 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
                 SM32ASendOrder();
             }
         });
+        mToText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isStop = !isStop;
+            }
+        });
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int id) {
+                showHotMap = id == R.id.measure_view_2;
+                if (showHotMap) {
+                    postDataImage();
+                    mDataImageView.setVisibility(View.VISIBLE);
+                    mMatrixView.setVisibility(View.GONE);
+                } else {
+                    mDataImageView.setVisibility(View.GONE);
+                    mMatrixView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         return inflate;
     }
 
@@ -73,6 +102,16 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mSerialProduct = ((SerialActivity) getActivity()).getCurProduct();
+        postDataImage();
+        measure(mSerialProduct.getDevice(), mSerialProduct.getBaudrate());
+    }
+
+    private void checkOrder() {
+        byte[] order = mSerialProduct.getOrderDataOutputType(isAuto);
+        onOrder(order);
+    }
+
+    private void postDataImage() {
         mDataImageView.post(new Runnable() {
             @Override
             public void run() {
@@ -80,12 +119,6 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
                         mDataImageView.getHeight(), mSerialProduct.getMeasureParm().radio);
             }
         });
-        measure(mSerialProduct.getDevice(), mSerialProduct.getBaudrate());
-    }
-
-    private void checkOrder() {
-        byte[] order = mSerialProduct.getOrderDataOutputType(isAuto);
-        onOrder(order);
     }
 
     @Override
@@ -110,6 +143,7 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
             onClick(null);
         }
     }
+
     DecimalFormat fnum = new DecimalFormat("##0.00");
     Bitmap bitmap;
     Handler mHandler = new Handler(new Handler.Callback() {
@@ -124,10 +158,18 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
             if (temperature != null) {
                 mTaText.setText("TA:" + fnum.format(temperature.ta) + "°");
                 mToText.setText("TO:" + fnum.format(temperature.temperatue) + "°");
+
+                if (showHotMap) {
                     recycleBitmap();
                     bitmap = mHeatMap.drawHeatMap(temperature, mSerialProduct.getMeasureParm().xCount,
                             mSerialProduct.getMeasureParm().yCount);
-                    mDataImageView.setImageBitmap(bitmap);
+                    if (bitmap != null)
+                        mDataImageView.setImageBitmap(bitmap);
+                } else if (!isStop) {
+                    MeasureParm parm = mSerialProduct.getMeasureParm();
+                    if (mMatrixView != null)
+                        mMatrixView.setDataResource(temperature, parm.xCount, parm.yCount);
+                }
             }
             return true;
         }
@@ -137,8 +179,8 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
     public void onDestroyView() {
         super.onDestroyView();
         recycleBitmap();
-        if(handler != null)
-        handler.removeCallbacks(sendDate);
+        if (handler != null)
+            handler.removeCallbacks(sendDate);
     }
 
     private void recycleBitmap() {
@@ -160,10 +202,11 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
     }
 
     private Handler handler;
+
     private void SM32ASendOrder() {
         handler = new Handler();
         if (mSerialProduct instanceof SYM32A_32x32_XM) {
-               handler.postDelayed(sendDate,400);
+            handler.postDelayed(sendDate, 400);
         }
     }
 
@@ -174,7 +217,7 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
             byte[] order = mSerialProduct.getOrderDataOutputQuery();
             onOrder(order);
             if (mCheckBox.isChecked())
-               handler.postDelayed(sendDate,400);
+                handler.postDelayed(sendDate, 400);
         }
     };
 
