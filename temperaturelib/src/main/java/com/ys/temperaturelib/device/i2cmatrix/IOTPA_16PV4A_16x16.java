@@ -112,8 +112,6 @@ public class IOTPA_16PV4A_16x16 extends IMatrixThermometer implements Temperatur
 //            } else if (tt >= 37.2f && tt <= 37.5f) {
 //                tt += 0.3f;
 //            }
-            if (getStorager() != null)
-//                getStorager().add(tempCount + ":" + floats + " t:" + tt);
             lastTemp = tt;
             tempCount++;
             return tt;

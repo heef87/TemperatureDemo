@@ -1,7 +1,6 @@
 package com.ys.temperaturelib.device.serialport;
 
 
-
 import com.ys.temperaturelib.temperature.MeasureParm;
 import com.ys.temperaturelib.temperature.TakeTempEntity;
 import com.ys.temperaturelib.temperature.TemperatureEntity;
@@ -129,7 +128,8 @@ public class SYM32A_32x32_XM extends ProductImp implements TemperatureParser<byt
     List<Float> mFloats = new ArrayList<>();
     float lastTemp = 0;
     int tempCount = 0;
-    public static String getRandom(int min, int max){
+
+    public static String getRandom(int min, int max) {
         Random random = new Random();
         int s = random.nextInt(max) % (max - min + 1) + min;
         return String.valueOf(s);
@@ -158,13 +158,11 @@ public class SYM32A_32x32_XM extends ProductImp implements TemperatureParser<byt
             if (tt >= 35f && tt < 36f) {
 //                int tt1 = (int) (tt * 100);
 //                tt = Float.parseFloat("36." + String.valueOf(tt1).substring(2, 4));
-                tt = Float.parseFloat("36." + getRandom(10,30));
+                tt = Float.parseFloat("36." + getRandom(10, 30));
             }
 //            else if (tt >= 37.2f && tt <= 37.5f) {
 //                tt += 0.3f;
 //            }
-            if (getStorager() != null)
-//                getStorager().add(tempCount + ":" + floats + " t:" + tt);
             lastTemp = tt;
             tempCount++;
             return tt;

@@ -35,17 +35,11 @@ public class SThermometer extends MeasureDevice {
     String mDevice;
     int mBaudrate;
     TemperatureParser<byte[]> mParser;
-    TemperatureStorager mStorager;
     boolean isLoop = false;
     byte[] mOrder;
     boolean bigData = true;
 
     public SThermometer() {
-        mStorager = new TemperatureStorager();
-    }
-
-    public TemperatureStorager getStorager() {
-        return mStorager;
     }
 
     public void setTemperatureParser(TemperatureParser<byte[]> parser) {
@@ -58,7 +52,10 @@ public class SThermometer extends MeasureDevice {
 
     @Override
     protected boolean init() {
-        destroy();
+        if (mSerialPort != null) mSerialPort.release();
+        mSerialPort = null;
+        if (mDataRead != null) mDataRead.interrupt();
+        mDataRead = null;
         mSerialPort = new SerialPort();
         return mSerialPort.init(mDevice, mBaudrate);
     }
@@ -111,9 +108,7 @@ public class SThermometer extends MeasureDevice {
         mSerialPort = null;
         if (mDataRead != null) mDataRead.interrupt();
         mDataRead = null;
-        if (mStorager != null)
-            mStorager.exit();
-        mStorager = null;
+        TemperatureStorager.getInstance().exit();
     }
 
     @Override
@@ -155,15 +150,17 @@ public class SThermometer extends MeasureDevice {
                         SystemClock.sleep(20);
                     }
                     byte[] read = null;
-                    if (bigData) read = mSerialPort.read(period);
-                    else read = mSerialPort.read();
+                    if (mSerialPort != null) {
+                        if (bigData) read = mSerialPort.read(period);
+                        else read = mSerialPort.read();
 //                    Log.d("sky", "data11 = " + DataFormatUtil.bytesToHex(read));
-                    if (read != null && read.length > 0 && mParser != null) {
-                        byte[] oneFrame = mParser.oneFrame(read);
-                        if (oneFrame != null && oneFrame.length > 0) {
-                            TemperatureEntity entity = mParser.parse(oneFrame);
-                            if (result != null && entity != null) result.onResult(entity, oneFrame);
-                            if (mStorager != null) mStorager.add(entity);
+                        if (read != null && read.length > 0 && mParser != null) {
+                            byte[] oneFrame = mParser.oneFrame(read);
+                            if (oneFrame != null && oneFrame.length > 0) {
+                                TemperatureEntity entity = mParser.parse(oneFrame);
+                                if (result != null && entity != null)
+                                    result.onResult(entity, oneFrame);
+                            }
                         }
                     }
                 }

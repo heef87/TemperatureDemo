@@ -2,12 +2,15 @@ package com.ys.temperaturelib.device.i2cmatrix;
 
 
 import android.util.Log;
+
 import com.ys.mlx90641.Mlx90641;
 import com.ys.temperaturelib.device.IMatrixThermometer;
+import com.ys.temperaturelib.device.TemperatureStorager;
 import com.ys.temperaturelib.temperature.MeasureParm;
 import com.ys.temperaturelib.temperature.TakeTempEntity;
 import com.ys.temperaturelib.temperature.TemperatureEntity;
 import com.ys.temperaturelib.temperature.TemperatureParser;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -103,7 +106,7 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
                 if (floats.get(i) < min) min = floats.get(i);
             }
 
-            float tt = (sum - max)/ 4f + getTakeTempEntity().getTakeTemperature();
+            float tt = (sum - max) / 4f + getTakeTempEntity().getTakeTemperature();
 //            if (tt >= 34f && tt < 36f) {
 //                int tt1 = (int) (tt * 100);
 //                tt = Float.parseFloat("36." + String.valueOf(tt1).substring(2, 4));
@@ -133,25 +136,25 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
             float[] datas = new float[193];
             for (int i = 0; i < data.length; i++) {
                 String temp = data[i] + "";
-                temp = temp.substring(0,4);
+                temp = temp.substring(0, 4);
                 datas[i] = Float.parseFloat(temp);
             }
             data = datas;
-            float[] toDatas = Arrays.copyOfRange(data,0,192);
+            float[] toDatas = Arrays.copyOfRange(data, 0, 192);
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("全部的温度点数：\n");
             stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas, 0, 16))).append("\n");
-            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas,16,32)) + "\n");
-            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas,32,48)) + "\n");
-            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas,48,64)) + "\n");
-            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas,64,80)) + "\n");
-            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas,80,96)) + "\n");
-            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas,96,112)) + "\n");
-            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas,112,128)) + "\n");
-            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas,128,144)) + "\n");
-            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas,144,160)) + "\n");
-            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas,160,176)) + "\n");
-            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas,176,192)));
+            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas, 16, 32)) + "\n");
+            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas, 32, 48)) + "\n");
+            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas, 48, 64)) + "\n");
+            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas, 64, 80)) + "\n");
+            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas, 80, 96)) + "\n");
+            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas, 96, 112)) + "\n");
+            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas, 112, 128)) + "\n");
+            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas, 128, 144)) + "\n");
+            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas, 144, 160)) + "\n");
+            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas, 160, 176)) + "\n");
+            stringBuilder.append(Arrays.toString(Arrays.copyOfRange(toDatas, 176, 192)));
             TemperatureEntity entity = new TemperatureEntity();
             List<Float> temps = new ArrayList<>();
             entity.min = entity.max = data[0] > 42 ? 42 : data[0];
@@ -168,7 +171,7 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
             }
 
             //比最大值小1度的点数
-            int maxCount = getMinCount(entity.max,toDatas);
+            int maxCount = getMinCount(entity.max, toDatas);
             double correctValue = 0;
             if (maxCount > 0 && maxCount < 10)
                 correctValue = getCorrectData1(maxCount);
@@ -177,45 +180,44 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
             else if (maxCount > 20 && maxCount < 46)
                 correctValue = getCorrectData3(maxCount);
             entity.max += correctValue;
-            Log.d("sky","maxCount = " + maxCount + ", correctValue = " + correctValue);
+            Log.d("sky", "maxCount = " + maxCount + ", correctValue = " + correctValue);
 
             entity.tempList = temps;
             entity.ta = data[192];
-            entity.temperatue = check(entity.max , entity);
+            entity.temperatue = check(entity.max, entity);
 
             stringBuilder.append("\nTO： " + entity.temperatue);
             stringBuilder.append("\nTA： " + entity.ta);
             stringBuilder.append("\nmax：" + entity.max);
             stringBuilder.append("\nmin：" + entity.min);
 //            stringBuilder.append("\n补偿的值：" + correctValue);
-            stringBuilder.append("\n比TA值大1度之内的点数:" + getMaxCount(entity.ta,toDatas));
+            stringBuilder.append("\n比TA值大1度之内的点数:" + getMaxCount(entity.ta, toDatas));
             stringBuilder.append("\n比max小1度之内的点数：" + maxCount);
-            stringBuilder.append("\n比min大1度之内的点数：" + getMaxCount(entity.min,toDatas) + "\n");
+            stringBuilder.append("\n比min大1度之内的点数：" + getMaxCount(entity.min, toDatas) + "\n");
             entity.sb = stringBuilder.toString();
 
-            if (getStorager() != null)
-                getStorager().add(stringBuilder.toString());
+            TemperatureStorager.getInstance().add(stringBuilder.toString());
             return isvalid ? entity : null;
         }
         return null;
     }
 
     //获取比指定温度小1度内的点数
-    private int getMinCount(float target,float[] data) {
+    private int getMinCount(float target, float[] data) {
         int count = 0;
         for (float d : data) {
-            if ((target-d) > 0 && (target-d) < 1)
-                count ++;
+            if ((target - d) > 0 && (target - d) < 1)
+                count++;
         }
         return count;
     }
 
     //获取比指定温度大1度内的点数
-    private int getMaxCount(float target,float[] data) {
+    private int getMaxCount(float target, float[] data) {
         int count = 0;
         for (float d : data) {
             if ((d - target) > 0 && (d - target) < 1)
-                count ++;
+                count++;
         }
         return count;
     }

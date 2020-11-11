@@ -3,6 +3,7 @@ package com.ys.temperaturelib.device.i2cmatrix;
 import com.ys.otpa16r2.Otpa16R2;
 import com.ys.rtx2080ti.Rtx2080ti;
 import com.ys.temperaturelib.device.IMatrixThermometer;
+import com.ys.temperaturelib.device.TemperatureStorager;
 import com.ys.temperaturelib.temperature.MeasureParm;
 import com.ys.temperaturelib.temperature.TakeTempEntity;
 import com.ys.temperaturelib.temperature.TemperatureEntity;
@@ -127,12 +128,10 @@ public class IOTPA_16_R2_16x16 extends IMatrixThermometer implements Temperature
             } else if (tt >= 36.9f && tt <= 37.3f) {
                 tt -= 0.4f;
             }
-            if (getStorager() != null) {
-                getStorager().add("平均值:" + getString(sum / 3f) +
-                        ", 平均值+距离补偿:" + getString(sum / 3f + takeTempEntity.getTakeTemperature()) +
-                        ", to：" + getString(tt) + ", ta:" + getString(entity.ta)
-                        + "\n" + floats);
-            }
+            TemperatureStorager.getInstance().add("平均值:" + getString(sum / 3f) +
+                    ", 平均值+距离补偿:" + getString(sum / 3f + takeTempEntity.getTakeTemperature()) +
+                    ", to：" + getString(tt) + ", ta:" + getString(entity.ta)
+                    + "\n" + floats);
             lastTemp = tt;
             tempCount++;
             return tt;

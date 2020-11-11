@@ -118,8 +118,6 @@ public class IRTX2080TI_16x16 extends IMatrixThermometer implements TemperatureP
 //            } else if (tt >= 37.2f && tt <= 37.5f) {
 //                tt += 0.3f;
 //            }
-            if (getStorager() != null)
-//                getStorager().add(tempCount + ":" + floats + " t:" + tt);
             lastTemp = tt;
             tempCount++;
             return tt;

@@ -2,26 +2,17 @@ package com.ys.temperaturelib.device;
 
 import android.os.SystemClock;
 
-import com.ys.temperaturelib.temperature.MeasureParm;
-import com.ys.temperaturelib.temperature.TakeTempEntity;
 import com.ys.temperaturelib.temperature.TemperatureEntity;
 import com.ys.temperaturelib.temperature.TemperatureParser;
-
-import java.util.List;
 
 public abstract class IMatrixThermometer extends MeasureDevice {
     boolean enabled;
     DataRead mDataRead;
     TemperatureParser<float[]> mParser;
-    TemperatureStorager mStorager;
 
     public IMatrixThermometer() {
-        mStorager = new TemperatureStorager();
     }
 
-    public TemperatureStorager getStorager(){
-        return mStorager;
-    }
     public void setParser(TemperatureParser<float[]> parser) {
         mParser = parser;
     }
@@ -54,9 +45,7 @@ public abstract class IMatrixThermometer extends MeasureDevice {
         enabled = false;
         if (mDataRead != null) mDataRead.interrupt();
         mDataRead = null;
-        if (mStorager != null)
-            mStorager.exit();
-        mStorager = null;
+        TemperatureStorager.getInstance().exit();
     }
 
     /**
@@ -88,7 +77,6 @@ public abstract class IMatrixThermometer extends MeasureDevice {
                     if (oneFrame != null) {
                         TemperatureEntity entity = mParser.parse(oneFrame);
                         if (mResult != null) mResult.onResult(entity, oneFrame);
-                        if (mStorager != null) mStorager.add(entity);
                     }
                 }
                 if (isInterrupted) {

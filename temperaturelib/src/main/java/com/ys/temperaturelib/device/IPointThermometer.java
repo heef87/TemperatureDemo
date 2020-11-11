@@ -13,20 +13,14 @@ public class IPointThermometer extends MeasureDevice {
     File tempFile;
     boolean enabled;
     DataRead mDataRead;
-    TemperatureStorager mStorager;
     String filePath;
 
     public IPointThermometer() {
-        mStorager = new TemperatureStorager();
     }
 
     public IPointThermometer(String filePath) {
         this();
         this.filePath = filePath;
-    }
-
-    public TemperatureStorager getStorager() {
-        return mStorager;
     }
 
     @Override
@@ -79,9 +73,7 @@ public class IPointThermometer extends MeasureDevice {
     public void destroy() {
         if (mDataRead != null) mDataRead.interrupt();
         mDataRead = null;
-        if (mStorager != null)
-            mStorager.exit();
-        mStorager = null;
+        TemperatureStorager.getInstance().exit();
     }
 
     @Override
@@ -120,7 +112,6 @@ public class IPointThermometer extends MeasureDevice {
                 if (isInterrupted) break;
                 TemperatureEntity entity = getTemperature();
                 if (mResult != null && entity != null) mResult.onResult(entity, null);
-                if (mStorager != null) mStorager.add(entity);
             }
         }
     }
