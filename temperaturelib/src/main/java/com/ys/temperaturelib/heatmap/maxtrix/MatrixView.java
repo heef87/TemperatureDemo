@@ -1,15 +1,12 @@
 package com.ys.temperaturelib.heatmap.maxtrix;
 
-import android.animation.ArgbEvaluator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.HandlerThread;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -125,7 +122,7 @@ public class MatrixView extends View {
             //行
             for (int j = 0; j < row; j++) {
                 rectF.set(startX, startY, startX + defaultSize, startY + defaultSize);
-                DrawableInfo drawableInfo = mDrawableInfos.get(i * (row - 1) + j);
+                DrawableInfo drawableInfo = mDrawableInfos.get(i * row + j);
                 mPaint.setColor(drawableInfo.color);
                 canvas.drawRoundRect(rectF, 0, 0, mPaint);
                 Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
@@ -167,7 +164,7 @@ public class MatrixView extends View {
         int color = 0;
         float sum = 0;
         if (max < 36f || max > 42) {
-            sum = max - 36f;
+            sum = max - 38f;
         }
         if (temp < 32.5f + sum) {
             color = getResources().getColor(R.color.blue);
