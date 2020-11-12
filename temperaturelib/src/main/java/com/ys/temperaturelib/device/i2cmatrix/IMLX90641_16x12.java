@@ -88,8 +88,8 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
 
     @Override
     public float check(float value, TemperatureEntity entity) {
-//        TakeTempEntity takeTempEntity = getTakeTempEntity();
-//        if (!takeTempEntity.isNeedCheck()) return value;
+        TakeTempEntity takeTempEntity = getTakeTempEntity();
+        if (!takeTempEntity.isNeedCheck()) return value;
         count++;
         mFloats.add(value);
         if (mFloats.size() == 6) {
@@ -107,13 +107,6 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
             }
 
             float tt = (sum - max) / 4f + getTakeTempEntity().getTakeTemperature();
-//            if (tt >= 34f && tt < 36f) {
-//                int tt1 = (int) (tt * 100);
-//                tt = Float.parseFloat("36." + String.valueOf(tt1).substring(2, 4));
-//            } else if (tt >= 37.2f && tt <= 37.5f) {
-//                tt += 0.3f;
-//            }
-//            getStorager().add(tempCount + ":" + floats + " t:" + tt);
             lastTemp = tt;
             tempCount++;
             return tt;
@@ -159,7 +152,8 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
             List<Float> temps = new ArrayList<>();
             entity.min = entity.max = data[0] > 42 ? 42 : data[0];
             boolean isvalid = true;
-            for (int i = 0; i < data.length - 2; i++) {
+            float[] mytemp = new float[data.length - 1];
+            for (int i = 0; i < data.length - 1; i++) {
                 if (data[i] < 0) {
                     isvalid = false;
                     break;
@@ -167,9 +161,11 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
                 float temp = data[i];
                 if (temp < entity.min) entity.min = temp;
                 if (temp > entity.max) entity.max = temp;
-                temps.add(temp);
+                mytemp[mytemp.length - 1 - i] = temp;
             }
-
+            if (isvalid) for (int i = 0; i < mytemp.length; i++) {
+                temps.add(mytemp[i]);
+            }
             //比最大值小1度的点数
             int maxCount = getMinCount(entity.max, toDatas);
             double correctValue = 0;
@@ -180,7 +176,7 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
             else if (maxCount > 20 && maxCount < 46)
                 correctValue = getCorrectData3(maxCount);
             entity.max += correctValue;
-            Log.d("sky", "maxCount = " + maxCount + ", correctValue = " + correctValue);
+//            Log.d("sky", "maxCount = " + maxCount + ", correctValue = " + correctValue);
 
             entity.tempList = temps;
             entity.ta = data[192];

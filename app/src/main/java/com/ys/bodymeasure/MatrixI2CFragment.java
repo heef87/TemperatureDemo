@@ -115,17 +115,15 @@ public class MatrixI2CFragment extends BaseFragment {
                 mToText.setText("TO:" + fnum.format(temperature.temperatue) + "°");
                 mTaText.setText("TA:" + fnum.format(temperature.ta) + "°");
                 mDataText.setText(temperature.sb);
-                if (!(mThermometer instanceof IMLX90641_16x12)) {
-                    if (showHotMap) {
-                        Bitmap bitmap = mHeatMap.drawHeatMap(temperature
-                                , mThermometer.getMeasureParm().xCount
-                                , mThermometer.getMeasureParm().yCount);
-                        if (bitmap != null)
-                            mDataImageView.setImageBitmap(bitmap);
-                    } else {
-                        MeasureParm parm = mThermometer.getMeasureParm();
-                        mMatrixView.setDataResource(temperature, parm.xCount, parm.yCount);
-                    }
+                if (showHotMap) {
+                    Bitmap bitmap = mHeatMap.drawHeatMap(temperature
+                            , mThermometer.getMeasureParm().xCount
+                            , mThermometer.getMeasureParm().yCount);
+                    if (bitmap != null)
+                        mDataImageView.setImageBitmap(bitmap);
+                } else {
+                    MeasureParm parm = mThermometer.getMeasureParm();
+                    mMatrixView.setDataResource(temperature, parm.xCount, parm.yCount);
                 }
             }
             return true;
