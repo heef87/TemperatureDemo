@@ -30,6 +30,7 @@ import com.ys.temperaturelib.device.serialport.SMLX90621_RR;
 import com.ys.temperaturelib.device.serialport.SMLX90621_YS;
 import com.ys.temperaturelib.device.serialport.SMLX90641_STM32;
 import com.ys.temperaturelib.device.serialport.SYM32A_32x32_XM;
+import com.ys.temperaturelib.device.serialport.YS_HAIMAN;
 import com.ys.temperaturelib.range.MesureResult;
 import com.ys.temperaturelib.range.RangeFinder;
 import com.ys.temperaturelib.range.device.FileImpl;
@@ -45,12 +46,12 @@ public class SerialActivity extends AppCompatActivity implements View.OnClickLis
             SGY_MCU90614_TW.DEFAULT_MODE_NAME, SGY_MCU90640_32x24.DEFAULT_MODE_NAME, SM23_32x32_XM.DEFAULT_MODE_NAME,
             SYM32A_32x32_XM.DEFAULT_MODE_NAME, SHAIMAN_32x24.DEFAULT_MODE_NAME, SMLX90621_RR.DEFAULT_MODE_NAME,
             SMLX90621_YS.DEFAULT_MODE_NAME, CHUWO_32x32.DEFAULT_MODE_NAME, RE_XINGMA.DEFAULT_MODE_NAME, SMLX90621_HH.DEFAULT_MODE_NAME
-            , SMLX90641_STM32.DEFAULT_MODE_NAME, SHTPA_32x32dR2L5_single.DEFAULT_MODE_NAME};
+            , SMLX90641_STM32.DEFAULT_MODE_NAME, SHTPA_32x32dR2L5_single.DEFAULT_MODE_NAME, YS_HAIMAN.DEFAULT_MODE_NAME};
 
     ProductImp[] mSerialPorts = new ProductImp[]{
             new SLSC_HM_32x32(), new RQVK002_TW(), new SMLX90614(), new SGY_MCU90614_TW(), new SGY_MCU90640_32x24(), new SM23_32x32_XM(),
             new SYM32A_32x32_XM(), new SHAIMAN_32x24(), new SMLX90621_RR(), new SMLX90621_YS(), new CHUWO_32x32(), new RE_XINGMA(),
-            new SMLX90621_HH(), new SMLX90641_STM32(), new SHTPA_32x32dR2L5_single()
+            new SMLX90621_HH(), new SMLX90641_STM32(), new SHTPA_32x32dR2L5_single(), new YS_HAIMAN()
     };
 
     AlertDialog mDevicesDialog;
