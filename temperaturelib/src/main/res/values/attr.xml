@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--原型进度条-->
+    <declare-styleable name="matrix_view">
+        <attr name="view_size" format="integer" />
+    </declare-styleable>
+
+</resources>
