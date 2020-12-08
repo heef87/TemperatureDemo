@@ -145,6 +145,7 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
     }
 
     DecimalFormat fnum = new DecimalFormat("##0.00");
+    DecimalFormat fnumTo = new DecimalFormat("##00.00");
     Bitmap bitmap;
     Handler mHandler = new Handler(new Handler.Callback() {
         @Override
@@ -156,9 +157,8 @@ public class MatrixSerialFragment extends BaseFragment implements View.OnClickLi
 
             TemperatureEntity temperature = bundle.getParcelable("_temp");
             if (temperature != null) {
+                mToText.setText("TO:" + fnumTo.format(temperature.temperatue) + "°");
                 mTaText.setText("TA:" + fnum.format(temperature.ta) + "°");
-                mToText.setText("TO:" + fnum.format(temperature.temperatue) + "°");
-
                 if (showHotMap) {
                     recycleBitmap();
                     bitmap = mHeatMap.drawHeatMap(temperature, mSerialProduct.getMeasureParm().xCount,

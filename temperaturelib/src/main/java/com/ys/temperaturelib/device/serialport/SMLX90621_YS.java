@@ -2,10 +2,12 @@ package com.ys.temperaturelib.device.serialport;
 
 import android.util.Log;
 
+import com.ys.temperaturelib.device.TemperatureStorager;
 import com.ys.temperaturelib.temperature.MeasureParm;
 import com.ys.temperaturelib.temperature.TakeTempEntity;
 import com.ys.temperaturelib.temperature.TemperatureEntity;
 import com.ys.temperaturelib.temperature.TemperatureParser;
+import com.ys.temperaturelib.utils.DataFormatUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,16 +133,23 @@ public class SMLX90621_YS extends ProductImp implements TemperatureParser<byte[]
                 tt += takeTempEntity.isLight() ? -1.0f : 0f;
                 tt -= 0.4f;
             }
-//            getStorager().add("平均值：" + getString(sum / 3f) +
-//                    ", 平均值+距离补偿:" + getString(sum / 3f + takeTempEntity.getTakeTemperature()) +
-//                    ", 平均值+ta补偿:" + getString(tt1) +
-//                    ", to：" + getString(tt) + ", ta:" + getString(ta));
-//            getStorager().add(tempCount + ":" + floats + " t:" + tt);
             lastTemp = tt;
             tempCount++;
             return tt;
         }
         return lastTemp;
+    }
+
+    private String getSort(List<Float> data) {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < data.size(); i++) {
+            int rou = i % MATRIX_COUT_X;
+            buffer.append(data.get(i) + ",");
+            if (rou == 0) {
+                buffer.append("\n");
+            }
+        }
+        return buffer.toString();
     }
 
     private String getString(float value) {
@@ -158,18 +167,18 @@ public class SMLX90621_YS extends ProductImp implements TemperatureParser<byte[]
                     && (data[data.length - 1] & 0xFF) == 0xBF) {
                 TemperatureEntity entity = new TemperatureEntity();
                 List<Float> temps = new ArrayList<>();
-                entity.min = entity.max = (((data[3] & 0xFF) << 8 | (data[4] & 0xFF))) / 100.0f;
-                entity.ta = ((data[data.length - 5] & 0xFF) << 8 | (data[data.length - 4] & 0xFF)) / 100.0f;
+                entity.min = entity.max = DataFormatUtil.getByteToInt(data[3], data[4]) / 100.0f;
+                entity.ta = DataFormatUtil.getByteToInt(data[data.length - 5], data[data.length - 4]) / 100.0f;
                 for (int i = 3; i < data.length - 5; i = i + 2) {
-                    int sum = (data[i] & 0xFF) << 8 | (data[i + 1] & 0xFF);
+                    int sum = DataFormatUtil.getByteToInt(data[i], data[i + 1]);
                     float temp = sum / 100f;
                     if (temp < entity.min) entity.min = temp;
                     if (temp > entity.max) entity.max = temp;
                     temps.add(temp);
                 }
-//                getStorager().add(" List=" + temps + "\n");
                 entity.tempList = temps;
                 entity.temperatue = check(entity.max, entity);
+                TemperatureStorager.getInstance().add("" + getSort(entity.tempList));
                 return entity;
             }
         }

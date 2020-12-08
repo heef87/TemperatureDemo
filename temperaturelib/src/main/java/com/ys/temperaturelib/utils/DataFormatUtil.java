@@ -80,4 +80,12 @@ public class DataFormatUtil {
         return (low & 0xFF) | ((high & 0xFF) << 8);
     }
 
+    public static int getByteToInt(byte hb, byte lb) {
+        String toHex = bytesToHex(new byte[]{hb, lb});
+        if (toHex.startsWith("f")) {
+            return ((hb) << 8) | (lb);
+        } else {
+            return ((hb & 0xFF) << 8) | (lb & 0xFF);
+        }
+    }
 }
