@@ -126,13 +126,13 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
     @Override
     public TemperatureEntity parse(float[] data) {
         if (data != null) {
-            float[] datas = new float[193];
-            for (int i = 0; i < data.length; i++) {
-                String temp = data[i] + "";
-                temp = temp.substring(0, 4);
-                datas[i] = Float.parseFloat(temp);
-            }
-            data = datas;
+//            float[] datas = new float[193];
+//            for (int i = 0; i < data.length; i++) {
+//                String temp = data[i] + "";
+//                temp = temp.substring(0, 4);
+//                datas[i] = Float.parseFloat(temp);
+//            }
+//            data = datas;
             float[] toDatas = Arrays.copyOfRange(data, 0, 192);
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("全部的温度点数：\n");
@@ -154,10 +154,10 @@ public class IMLX90641_16x12 extends IMatrixThermometer implements TemperaturePa
             boolean isvalid = true;
             float[] mytemp = new float[data.length - 1];
             for (int i = 0; i < data.length - 1; i++) {
-                if (data[i] < 0) {
-                    isvalid = false;
-                    break;
-                }
+//                if (data[i] < 0) {
+//                    isvalid = false;
+//                    break;
+//                }
                 float temp = data[i];
                 if (temp < entity.min) entity.min = temp;
                 if (temp > entity.max) entity.max = temp;
